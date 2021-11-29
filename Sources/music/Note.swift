@@ -1,37 +1,101 @@
-//
-//  note.swift
-//  
-//
-//  Created by Tjeerd in ‘t Veen on 22/11/2021.
-//
-
 // Note and step
 
 import Foundation
 
-/// A representation of a musical note
-enum Note: String, Equatable, CaseIterable {
-    case a, aSharp
-    case b
-    case c, cSharp
-    case d, dSharp
-    case e
-    case f, fSharp
-    case g, gSharp
-    
-    /// Turn a string representation, such as  `F` or `C#` into a `Note` type.
-    init?(string: String) {
-        let rawValue = string.replacingOccurrences(of: "#", with: "Sharp")
-        self.init(rawValue: rawValue)
-    }
+typealias Scale = Note // E.g. C can be note C or the C major scale
+
+enum Step {
+    case whole
+    case half
 }
 
+/// A representation of a musical note
+struct Note: Equatable {
+    enum Name: String, CaseIterable {
+        case a, b, c, d, e, f, g
+    }
+    
+    enum Accidental: CustomStringConvertible {
+        case sharp
+        case flat
+        case natural
+        
+        var description: String {
+            switch self {
+            case .sharp: return "♯"
+            case .flat: return "♭"
+            case .natural: return ""
+            }
+        }
+    }
+    
+    static let naturals: [Note] = Name.allCases.map(Note.init)
+    
+    let name: Name
+    let accidental: Accidental
+    
+    func flatten() -> Note {
+        switch accidental {
+        case .sharp:
+            return Note(name: name, accidental: .natural)
+        case .flat:
+            fatalError("No support for double flat")
+        case .natural:
+            return Note(name: name, accidental: .flat)
+        }
+    }
+    
+    func sharpen() -> Note {
+        switch accidental {
+        case .sharp:
+            fatalError("No support for double sharp")
+        case .flat:
+            return Note(name: name, accidental: .natural)
+        case .natural:
+            return Note(name: name, accidental: .sharp)
+        }
+    }
+    
+    var natural: Note {
+        return Note(name: name, accidental: .natural)
+    }
+    
+}
+
+extension Note {
+    
+    init(name: Name) {
+        self.name = name
+        self.accidental = .natural
+    }
+    
+    init?(string: String) {
+        var iterator = string.makeIterator()
+        guard let nameStr = iterator.next(),
+              let name = Note.Name(rawValue: String(nameStr).lowercased()) else {
+           return nil
+        }
+        
+        if let accidentalStr = iterator.next() {
+            
+            let accidental: Note.Accidental
+            switch accidentalStr {
+            case "#": accidental = Accidental.sharp
+            case "b": accidental = Accidental.flat
+            default:
+                return nil
+            }
+            
+            self = Note(name: name, accidental: accidental)
+        } else {
+            self = Note(name: name)
+        }
+    }
+    
+}
 
 extension Note: CustomStringConvertible {
     var description: String {
-        self.rawValue
-            .replacingOccurrences(of: "Sharp", with: "♯")
-            .uppercased()
+        name.rawValue.uppercased() + accidental.description
     }
 }
-
