@@ -1,8 +1,8 @@
 import XCTest
 import class Foundation.Bundle
-import music
+import MusicCLT
 
-final class musicTests: XCTestCase {
+final class MusicTests: XCTestCase {
     
     func testMajorScales() throws {
         let expectedPairs = [
