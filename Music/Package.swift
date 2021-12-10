@@ -5,20 +5,23 @@ import PackageDescription
 
 let package = Package(
     name: "Music",
+    products: [
+        .library(name: "Music", targets: ["Music"])
+    ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.0"),
     ],
     targets: [
-        .target(name: "Music"), // New target
+        .target(name: "Music"),
         .executableTarget(
-            name: "MusicCLT", // Music is renamed to MusicCLT
+            name: "MusicCLT",
             dependencies: [
-                "Music", // MusicCLT depends on Music
+                "Music",
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ]),
         .testTarget(
             name: "MusicTests",
-            dependencies: ["MusicCLT"]), // Now depends on MusicCLT
+            dependencies: ["MusicCLT"]),
     ]
 )
 
