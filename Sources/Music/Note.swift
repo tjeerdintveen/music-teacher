@@ -2,7 +2,7 @@
 
 import Foundation
 
-typealias Scale = Note // E.g. C can be note C or the C major scale
+public typealias Scale = Note // E.g. C can be note C or the C major scale
 
 enum Step {
     case whole
@@ -10,17 +10,17 @@ enum Step {
 }
 
 /// A representation of a musical note
-struct Note: Equatable {
-    enum Name: String, CaseIterable {
+public struct Note: Equatable {
+    public enum Name: String, CaseIterable {
         case a, b, c, d, e, f, g
     }
     
-    enum Accidental: CustomStringConvertible {
+    public enum Accidental: CustomStringConvertible {
         case sharp
         case flat
         case natural
         
-        var description: String {
+        public var description: String {
             switch self {
             case .sharp: return "♯"
             case .flat: return "♭"
@@ -64,12 +64,12 @@ struct Note: Equatable {
 
 extension Note {
     
-    init(name: Name) {
+    public init(name: Name) {
         self.name = name
         self.accidental = .natural
     }
     
-    init?(string: String) {
+    public init?(string: String) {
         var iterator = string.makeIterator()
         guard let nameStr = iterator.next(),
               let name = Note.Name(rawValue: String(nameStr).lowercased()) else {
@@ -95,7 +95,7 @@ extension Note {
 }
 
 extension Note: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         name.rawValue.uppercased() + accidental.description
     }
 }

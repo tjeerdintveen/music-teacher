@@ -88,7 +88,7 @@ final class MusicTests: XCTestCase {
             return ""
         }
         
-        let path = productsDirectory.appendingPathComponent("music")
+        let path = productsDirectory.appendingPathComponent("musicclt")
 
         let process = Process()
         process.executableURL = path

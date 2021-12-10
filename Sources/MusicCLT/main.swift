@@ -1,4 +1,6 @@
 import ArgumentParser
+import Music
+
 struct Music: ParsableCommand {
     
     static var configuration = CommandConfiguration(abstract: "Helping you understand music theory.")
@@ -19,16 +21,16 @@ struct Music: ParsableCommand {
         switch (scale, signature, note.flatMap(Note.init)) {
         case (true, _, let scale?):
             // Specific scale
-            print(notesIn(scale: scale).description)
+            print(Notes.notesIn(scale: scale).description)
         case (true, _, nil):
             // Scale and no note.
             print("W W H W W W H")
         case (_, true, let note?):
-            print(keySignature(note: note).description)
+            print(Notes.keySignature(note: note).description)
         case (_, _, let note?) where minor:
-            print(minorChordFor(note: note).description)
+            print(Notes.minorChordFor(note: note).description)
         case (_, _, let note?):
-            print(majorChordFor(note: note).description)
+            print(Notes.majorChordFor(note: note).description)
         default:
             // If we have no command at all, print the help-message.
             print(Music.helpMessage())
