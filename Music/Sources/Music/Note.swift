@@ -29,7 +29,7 @@ public struct Note: Equatable {
         }
     }
     
-    static let naturals: [Note] = Name.allCases.map(Note.init)
+    public static let naturals: [Note] = Name.allCases.map(Note.init)
     
     let name: Name
     let accidental: Accidental
